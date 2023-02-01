@@ -7,4 +7,9 @@ const userSchemaSignUp = joi.object<UserInsertData>({
     imageUrl: joi.string().pattern(/(http(s?):\/\/.*\.(?:png|jpg))/).required()
 });
 
-export { userSchemaSignUp }
+const userSchemaSignIn = joi.object({
+    email: joi.string().email().required(),
+    password: joi.string().min(4).required()
+});
+
+export { userSchemaSignUp, userSchemaSignIn }

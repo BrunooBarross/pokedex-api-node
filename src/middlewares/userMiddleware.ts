@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { userSchemaSignUp } from "../schemas/userSchema.js";
+import { userSchemaSignUp, userSchemaSignIn } from "../schemas/userSchema.js";
 import * as userRepository from "../repositories/userRepository.js"
 
 export function validateDataSignUp(req: Request, res: Response, next: NextFunction) {
@@ -18,6 +18,16 @@ export async function verifyEmailConflict(req: Request, res: Response, next: Nex
 
     if (existUser) {
         throw { type: "conflict", message: `email ${email} is already in use` }
+    }
+
+    next();
+}
+
+export function validateDataSignIn(req: Request, res: Response, next: NextFunction) {
+    const { error } = userSchemaSignIn.validate(req.body);
+
+    if (error) {
+        throw { type: "unprocessable_entity", message: error.details[0].message }
     }
 
     next();
