@@ -19,6 +19,7 @@ export async function signin(userData: UserInsertData) {
     const config = { expiresIn: 60 * 60 * 72 };
     const token = jwt.sign(data, process.env.JWT_SECRET, config);
     delete user.id;
+    delete user.password;
     return { token: token, ...user };
 }
 
