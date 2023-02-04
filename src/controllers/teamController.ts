@@ -7,3 +7,9 @@ export async function createTeam(req: Request, res: Response){
     const result = await teamService.createTeam(userId, titleTeam);
     res.status(201).send(result);
 }
+
+export async function listTeams(req: Request, res: Response){
+    const userId = res.locals.userId;
+    const result = await teamService.getTeams(userId);
+    res.status(200).send(result);
+}

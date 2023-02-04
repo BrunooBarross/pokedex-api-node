@@ -26,5 +26,16 @@ model Teams {
   userId              Int
   users               Users               @relation(fields: [userId], references: [id])
   createdAt           DateTime            @default(now())
+  Pokemons            Pokemons[]
   @@map("TB_TEAMS")
+}
+
+model Pokemons {
+  id          Int       @id @default(autoincrement())
+  pokemonId   Int   
+  teamId      Int
+  species     String
+  teams       Teams     @relation(fields: [teamId], references: [id])
+  createdAt   DateTime  @default(now())
+  @@map("TB_POKEMONS")
 }
