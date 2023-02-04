@@ -13,3 +13,10 @@ export async function listTeams(req: Request, res: Response){
     const result = await teamService.getTeams(userId);
     res.status(200).send(result);
 }
+
+export async function deleteTeam(req: Request, res: Response){
+    const teamId = req.params.teamId;
+    const userId = res.locals.userId;
+    await teamService.deleteTeam(userId, teamId);
+    res.sendStatus(200);
+}

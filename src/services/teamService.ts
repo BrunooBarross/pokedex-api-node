@@ -18,3 +18,19 @@ async function checkHasTitle(userId: number, title: string) {
 export async function getTeams(userId: number) {
     return teamRepository.getTeams(userId);
 }
+
+export async function deleteTeam(userId: number, teamId: string) {
+    if (!parseInt(teamId)) {
+        throw { type: "unprocessable_entity", message: `The id must be a number` };
+    }
+    await checkTeamExists(userId, teamId);
+    await teamRepository.deleteTeam(parseInt(teamId));
+}
+
+async function checkTeamExists(userId: number, teamId: string) {
+    const result = await teamRepository.findFirstTeam(userId, parseInt(teamId));
+
+    if (!result) {
+        throw { type: "not_Found", message: `Team not found` };
+    }
+}
