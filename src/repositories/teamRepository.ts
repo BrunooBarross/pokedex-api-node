@@ -1,7 +1,8 @@
-import { Teams } from "@prisma/client";
+import { Teams, Pokemons } from "@prisma/client";
 import prisma from "../db.js";
 
 export type TeamData = Omit<Teams, "id">;
+export type TeamPokemonData = Omit<Pokemons, "id">
 
 export async function findTitle(userId: number, titleTeam: string) {
     return prisma.teams.findFirst({
@@ -53,6 +54,22 @@ export async function deleteTeam(teamId: number) {
     return await prisma.teams.delete({
         where: {
             id: teamId
+        }
+    });
+}
+
+export async function findManyPokemons(teamId: number) {
+    return await prisma.pokemons.findMany({
+        where: {
+            teamId
+        }
+    });
+}
+
+export async function insertPokemonInTeam(data: TeamPokemonData) {
+    return await prisma.pokemons.create({
+        data: {
+            ...data
         }
     });
 }

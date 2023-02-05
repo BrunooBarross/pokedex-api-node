@@ -1,4 +1,5 @@
 import * as teamRepository from "../repositories/teamRepository.js"
+import { TeamPokemonData } from "../repositories/teamRepository"
 
 export async function createTeam(userId: number, title: string) {
     title = title[0].toUpperCase() + title.substring(1);
@@ -34,3 +35,24 @@ async function checkTeamExists(userId: number, teamId: string) {
         throw { type: "not_Found", message: `Team not found` };
     }
 }
+
+export async function insertPokemon(data: TeamPokemonData) {
+    data.species = data.species.toLowerCase();
+    await checkQuantityPokeTeam(data.teamId, data.species);
+    await teamRepository.insertPokemonInTeam(data);
+}
+
+async function checkQuantityPokeTeam(teamId:  number, species: string){
+    const result = await teamRepository.findManyPokemons(teamId);
+    if(result.length === 6){
+        throw { type: "unauthorized", message: `Max 6 pokemons per team` };
+    }
+
+    if(result.length > 0){
+        for(let i = 0; i < result.length; i++){
+            if (result[i].species == species){
+                throw { type: "conflict", message: `It is not possible to have the same species on the same team.` };
+            }
+        }
+    }
+};
